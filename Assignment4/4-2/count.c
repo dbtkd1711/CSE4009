@@ -147,7 +147,12 @@ void sig_handler(void*arg){
 		fprintf(stderr, "write error in signal_handler\n");
 		exit(1);
 	}
-
+	if(getpid()==pid[0])
+		printf("process ID : %d, count : %d\n", pid[0], count[0]);
+	if(getpid()==pid[1])
+		printf("process ID : %d, count : %d\n", pid[1], count[0]);
+	if(getpid()==pid[2])
+		printf("process ID : %d, count : %d\n", pid[2], count[0]);
 	// if count=num -> kill all the processes
 	if(count[0]==num[0]){
 		if(getpid()==pid[0]){
