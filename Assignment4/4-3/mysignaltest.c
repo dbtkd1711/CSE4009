@@ -9,12 +9,16 @@ static jmp_buf env_alrm;
 static void sig_alrm(int signo);
 static void sig_int(int signo);
 unsigned int sleep2(unsigned int seconds);
+struct sigaction act;
 
 int main(void)
 {
 	unsigned int unslept;
-
-	if (signal(SIGINT, sig_int) == SIG_ERR){
+	act.sa_handler = sig_int;
+	sigemptyset(&act.sa_mask);
+	act.sa_flags=0;
+	sigaddset(&act.sa_mask, SIGALRM);
+	if (sigaction(SIGINT, &act, NULL) == SIG_ERR){
 		fprintf(stderr, "signal(SIGINT) error");
 		exit(-1);
 	}
@@ -22,7 +26,7 @@ int main(void)
 	unslept = sleep2(5);
 
 	printf("sleep2 returned: %u\n", unslept);
-	return 0;
+	return 0;s
 }
 
 static void sig_alrm(int signo)
@@ -58,3 +62,4 @@ unsigned int sleep2(unsigned int seconds)
 	}
 	return alarm(0);
 }
+
