@@ -26,7 +26,7 @@ int main(void)
 	unslept = sleep2(5);
 
 	printf("sleep2 returned: %u\n", unslept);
-	return 0;s
+	return 0;
 }
 
 static void sig_alrm(int signo)
