@@ -86,7 +86,6 @@ void *hybrid_func(void *arg){
 		g_count++;
 		hybrid_lock_unlock(&g_hybrid);
 		/**************************************************************/
-	
 	}
 
 	return ;

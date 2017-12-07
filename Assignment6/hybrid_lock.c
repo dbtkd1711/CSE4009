@@ -42,12 +42,10 @@ int hybrid_lock_lock(hybrid_lock * h_lock){
 				break;
 		}
 	}
-	if(check == 0){
+	if(check == 0)
 		return 0;
-	}
-	else{
+	else
 		pthread_mutex_lock(&h_lock->mutex);
-	}
 }
 
 int hybrid_lock_unlock(hybrid_lock * h_lock){

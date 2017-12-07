@@ -1,7 +1,4 @@
 #include "hybrid_lock.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <pthread.h>
 
 long g_count = 0;
 pthread_mutex_t g_mutex;
@@ -38,6 +35,7 @@ int main(int argc, char *argv[])
 	thread_count = atol(argv[1]);
 	value = atol(argv[2]);
 
+	// Get Wanted lock from user
 	printf("Which lock do you want? Enter the number\n");
 	printf("1. mutex, 2. spin, 3. hybrid : ");
 
@@ -58,6 +56,9 @@ int main(int argc, char *argv[])
 	 * an argument. Each threads will increase g_count for
 	 * value times.
 	 */
+
+	// 1. Using mutex lock
+	// -> thread will execute thread_func_mutex
 	if(command == 1){
 		pthread_mutex_init(&g_mutex, NULL);
 		for (i = 0; i<thread_count; i++) {
@@ -70,6 +71,8 @@ int main(int argc, char *argv[])
 			}
 		}
 	}
+	// 2. Uisng spin lock
+	// -> thread will execute thread_func_spin
 	else if(command == 2){
 		pthread_spin_init(&g_spin, 0);
 		for (i = 0; i<thread_count; i++) {
@@ -82,10 +85,10 @@ int main(int argc, char *argv[])
 			}
 		}
 	}
+	// 3. Using hybrid lock
+	// -> thread will execute hybrid_func
 	else if(command == 3){
 		hybrid_lock_init(&g_hybrid);
-		//hybrid_lock_lock(&g_hybrid);
-
 		for (i = 0; i<thread_count; i++) {
 			rc = pthread_create(&tid[i], NULL, hybrid_func, (void*)value);
 			if (rc) {
@@ -102,7 +105,7 @@ int main(int argc, char *argv[])
 	}
 
 	/*
-	 * Wait until all the threads you created above are finished.
+	 * Wait until all the threads created above are finished.
 	 */
 	for (i = 0; i<thread_count; i++) {
 		rc = pthread_join(tid[i], NULL);
@@ -133,7 +136,6 @@ int main(int argc, char *argv[])
 
 void * thread_func_mutex(void *arg){
 	long i, count = (long)arg;
-
 	/*
 	 * Increase the global variable, g_count.
 	 * This code should be protected by
@@ -152,7 +154,6 @@ void * thread_func_mutex(void *arg){
 
 void * thread_func_spin(void *arg){
 	long i, count = (long)arg;
-
 	/*
 	 * Increase the global variable, g_count.
 	 * This code should be protected by
@@ -171,7 +172,6 @@ void * thread_func_spin(void *arg){
 
 void * hybrid_func(void *arg){
 	long i, count = (long)arg;
-
 	/*
 	 * Increase the global variable, g_count.
 	 * This code should be protected by

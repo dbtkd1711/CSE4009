@@ -1,7 +1,4 @@
 #include "hybrid_lock.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <pthread.h>
 
 long g_count = 0;
 pthread_mutex_t g_mutex;
@@ -37,6 +34,7 @@ int main(int argc, char *argv[])
 	thread_count = atol(argv[1]);
 	value = atol(argv[2]);
 
+	// Get Wanted lock from user
 	printf("Which lock ? Enter number\n");
 	printf("1. mutex, 2. spin, 3. hybrid : ");
 
@@ -57,6 +55,9 @@ int main(int argc, char *argv[])
 	 * an argument. Each threads will increase g_count for
 	 * value times.
 	 */
+	
+	// 1. Using mutex lock
+	// -> thread will execute thread_func_mutex
 	if(command == 1){
 		pthread_mutex_init(&g_mutex, NULL);
 		for (i = 0; i<thread_count; i++) {
@@ -69,6 +70,8 @@ int main(int argc, char *argv[])
 			}
 		}
 	}
+	// 2. Uisng spin lock
+	// -> thread will execute thread_func_spin
 	else if(command == 2){
 		pthread_spin_init(&g_spin, 0);
 		for (i = 0; i<thread_count; i++) {
@@ -95,6 +98,8 @@ int main(int argc, char *argv[])
 		}
 
 	}
+	// 3. Using hybrid lock
+	// -> thread will execute hybrid_func
 	else{
 		printf("**Wrong input**\n");
 		exit(0);
