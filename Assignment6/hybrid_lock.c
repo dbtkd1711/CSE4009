@@ -28,20 +28,13 @@ int hybrid_lock_lock(hybrid_lock * h_lock){
 
 	int check;
 	long long int i=0;
-	struct timeval start, cur;
-	double passed_time;
-
-	gettimeofday(&start, NULL);
 
 	while((check = pthread_mutex_trylock(&h_lock->mutex)) != 0){
 		i++;
-		if(i == 80000000){
-			gettimeofday(&cur, NULL);
-			passed_time = get_passed_time(&start, &cur);
-			if(passed_time >= (double)1)
-				break;
-		}
+		if(i == 80000000)
+			break;
 	}
+
 	if(check == 0)
 		return 0;
 	else
