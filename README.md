@@ -1,1 +1,1 @@
-# 2017-2-System-Programming
+System programming - Hanyang Univ.
